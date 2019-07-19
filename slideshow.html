@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
+        #app {
+            display: flex;
+            align-items: center
+        }
+
+        #app img {
+            width: 550px;
+            margin: 5px;
+        }
+
+        .arrow-left {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 25px 0 25px 20px;
+            border-color: transparent transparent transparent #575757;
+        }
+
+        .arrow-right {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 25px 20px 25px 0;
+            border-color: transparent #575757 transparent transparent;
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .fade-enter,
+        .fade-leave-to{
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <a class="arrow-right" @click="turnRight(-1)"></a>
+        <transition name="fade" appear mode="out-in">
+            <div v-for="(img,i) in images" v-if="index === i" :key="i">
+                <img :src="img.link" >
+            </div>
+        </transition>
+        <a class="arrow-left" @click="turnRight(1)"></a>
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    let app = new Vue({
+        el: '#app',
+        data: {
+            index: 0,
+            images: [
+                { link: 'https://images.unsplash.com/photo-1503066211613-c17ebc9daef0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80' },
+                { link: 'https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80' },
+                { link: 'https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80' },
+                { link: 'https://images.unsplash.com/photo-1463501810073-6e31c827a9bc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80' }
+            ],
+            time: null,
+        },
+        methods: {
+            turnRight(turn) {
+                this.index = (this.index + turn + this.images.length) % this.images.length
+            },
+            carousel() {
+                this.time = setInterval(() => {
+                    this.turnRight(1)
+                }, 3000)
+            },
+        },
+        computed: {
+            showImg() {
+                return this.index
+            }
+        },
+        mounted() {
+            this.carousel()
+        }
+    })
+
+
+</script>
+
+</html>
